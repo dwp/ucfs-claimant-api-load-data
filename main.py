@@ -5,7 +5,6 @@ import mysql.connector
 import mysql.connector.pooling
 from multiprocessing import Process
 import boto3
-import sys
 
 
 def query_nino(connection, nino):
@@ -82,16 +81,10 @@ def lambda_handler(event, context):
     logger.info("Load started")
     processes = []
 
-    if sys.version_info[0] < 3:
-        for table, files in event.iteritems():
-            for file in files:
-                logger.info("Loading {}".format(file))
-                processes.append(Process(target=execute_statement, args=(load_stmt.format(file, table),)))
-    else:
-        for table, files in event.items():
-            for file in files:
-                logger.info("Loading {}".format(file))
-                processes.append(Process(target=execute_statement, args=(load_stmt.format(file, table),)))
+    for table, files in event.items():
+        for file in files:
+            logger.info("Loading {}".format(file))
+            processes.append(Process(target=execute_statement, args=(load_stmt.format(file, table),)))
 
     for p in processes:
         p.start()
