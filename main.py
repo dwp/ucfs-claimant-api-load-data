@@ -81,7 +81,7 @@ def lambda_handler(event, context):
     logger.info("Load started")
     processes = []
 
-    for table, files in event.iteritems():
+    for table, files in event.items():
         for file in files:
             logger.info("Loading {}".format(file))
             processes.append(Process(target=execute_statement, args=(load_stmt.format(file, table),)))
