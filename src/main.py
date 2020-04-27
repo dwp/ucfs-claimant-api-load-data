@@ -1,10 +1,40 @@
 #!/usr/bin/python
 import logging
 import os
+import sys
+
 import mysql.connector
 import mysql.connector.pooling
 from multiprocessing import Process
 import boto3
+import json
+import argparse
+
+
+def get_parameters():
+    parser = argparse.ArgumentParser(
+        description="Convert S3 objects into Kafka messages"
+    )
+
+    # Parse command line inputs and set defaults
+    parser.add_argument("-m", "--manifest", help="JSON objected converted to string")
+
+    _args = parser.parse_args()
+
+    required_args = ["manifest"]
+    missing_args = []
+    for required_message_key in required_args:
+        if required_message_key not in _args:
+            missing_args.append(required_message_key)
+    if missing_args:
+        raise argparse.ArgumentError(
+            None,
+            "ArgumentError: The following required arguments are missing: {}".format(
+                ", ".join(missing_args)
+            ),
+        )
+
+    return _args
 
 
 def query_nino(connection, nino):
@@ -27,7 +57,6 @@ def rows_in_table(connection, table):
 
 def execute_statement(sql):
     connection = get_connection(get_master_password())
-    logger = logging.getLogger()
     cursor = connection.cursor()
     cursor.execute(sql)
     logger.debug("Loaded: {}".format(cursor.rowcount))
@@ -37,7 +66,6 @@ def execute_statement(sql):
 
 def execute_file(filename, connection, sql_parameters):
     sql = open(filename).read()
-    logger = logging.getLogger()
 
     cursor = connection.cursor()
     for result in cursor.execute(sql, sql_parameters, multi=True):
@@ -72,11 +100,7 @@ def get_connection(password):
     )
 
 
-def lambda_handler(event, context):
-
-    logger = logging.getLogger()
-    logger.setLevel(os.environ["LOG_LEVEL"])
-
+def main(manifest):
     password = get_master_password()
 
     post_parameters = {
@@ -93,7 +117,7 @@ def lambda_handler(event, context):
     logger.info("Load started")
     processes = []
 
-    for table, files in event.items():
+    for table, files in manifest.items():
         for file in files:
             logger.info("Loading {}".format(file))
             processes.append(
@@ -126,3 +150,26 @@ def lambda_handler(event, context):
     logger.info("Postload started")
     execute_file("post_load.sql", get_connection(password), post_parameters)
     logger.info("Postload finished")
+
+
+if __name__ == "__main__":
+    # Initialise logging
+    logger = logging.getLogger(__name__)
+    log_level = os.environ["LOG_LEVEL"] if "LOG_LEVEL" in os.environ else "ERROR"
+    logger.setLevel(logging.getLevelName(log_level.upper()))
+    logging.basicConfig(
+        stream=sys.stdout,
+        format="%(asctime)s %(levelname)s %(module)s "
+        "%(process)s[%(thread)s] %(message)s",
+    )
+    logger.info("Logging at {} level".format(log_level.upper()))
+
+    try:
+        args = get_parameters()
+        logger.debug(args)
+        json_manifest = json.loads(args.manifest)
+        logger.debug(json_manifest)
+        main(json_manifest)
+    except Exception as e:
+        logger.error(e)
+        raise e
