@@ -23,12 +23,6 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           args: --file=Dockerfile --severity-threshold=high --exclude-base-image-vulns --org=dwp-dataworks
 
-  build-and-format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
