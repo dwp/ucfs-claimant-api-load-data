@@ -23,7 +23,7 @@ def get_parameters():
 
     required_args = ["manifest"]
     missing_args = []
-    for required_message_key in required_args:
+    for required_message_key in required_args :
         if required_message_key not in _args:
             missing_args.append(required_message_key)
     if missing_args:
