@@ -164,14 +164,30 @@ def main(manifest):
     execute_file("post_load.sql", get_connection(password), post_parameters)
     logger.info("Postload finished")
 
-    connection = get_connection(password);
+    connection = get_connection(password)
     logger.info("Querying for duplicates")
-    log_query(logger, connection, 'DESCRIBE statement;')
-    log_query(logger, connection, 'SELECT * FROM statement LIMIT 1;')
-    log_query(logger, connection, 'SELECT nino FROM claimant GROUP BY nino HAVING COUNT(*) > 1;')
-    log_query(logger, connection, 'SELECT citizen_id FROM claimant GROUP BY citizen_id HAVING COUNT(*) > 1;')
-    log_query(logger, connection, 'SELECT contract_id FROM contract GROUP BY contract_id HAVING COUNT(*) > 1;')
-    log_query(logger, connection, 'SELECT statement_id FROM statement GROUP BY statement_id HAVING COUNT(*) > 1;')
+    log_query(logger, connection, "DESCRIBE statement;")
+    log_query(logger, connection, "SELECT * FROM statement LIMIT 1;")
+    log_query(
+        logger,
+        connection,
+        "SELECT nino FROM claimant GROUP BY nino HAVING COUNT(*) > 1;",
+    )
+    log_query(
+        logger,
+        connection,
+        "SELECT citizen_id FROM claimant GROUP BY citizen_id HAVING COUNT(*) > 1;",
+    )
+    log_query(
+        logger,
+        connection,
+        "SELECT contract_id FROM contract GROUP BY contract_id HAVING COUNT(*) > 1;",
+    )
+    log_query(
+        logger,
+        connection,
+        "SELECT statement_id FROM statement GROUP BY statement_id HAVING COUNT(*) > 1;",
+    )
 
 
 if __name__ == "__main__":
