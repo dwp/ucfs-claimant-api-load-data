@@ -4,7 +4,17 @@
 Python Lambda to orchestrate loading data into RDS from S3 for UCFS Claimant API service
 
 # Note
-For history prior to  the creation of this repo (2020-04-24) refer to archived private repo `dip/ucfs-claimant-load-data`
+For history prior to the creation of this repo (2020-04-24) refer to archived private repo `dip/ucfs-claimant-load-data`
+
+## Process
+1. All staging tables created by previous load are DROPPED
+1. New staging tables are created 
+1. Data is loaded into staging tables with PK, data, and virtual columns 
+1. Any rows with a NULL IDs are removed from the staging tables
+1. Unique constraints are added to the staging table ID columns
+1. Indices are added
+1. Live tables are renamed to `_old`
+1. Staging tables are renamed to become live tables
 
 # Building
 ```shell script
