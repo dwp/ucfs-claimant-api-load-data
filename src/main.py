@@ -171,22 +171,17 @@ def main(manifest):
     log_query(
         logger,
         connection,
-        "SELECT nino FROM claimant GROUP BY nino HAVING COUNT(*) > 1;",
+        "SELECT citizen_id, count(*) FROM claimant GROUP BY citizen_id HAVING COUNT(*) > 1;",
     )
     log_query(
         logger,
         connection,
-        "SELECT citizen_id FROM claimant GROUP BY citizen_id HAVING COUNT(*) > 1;",
+        "SELECT contract_id, count(*) FROM contract GROUP BY contract_id HAVING COUNT(*) > 1;",
     )
     log_query(
         logger,
         connection,
-        "SELECT contract_id FROM contract GROUP BY contract_id HAVING COUNT(*) > 1;",
-    )
-    log_query(
-        logger,
-        connection,
-        "SELECT statement_id FROM statement GROUP BY statement_id HAVING COUNT(*) > 1;",
+        "SELECT statement_id, count(*) FROM statement GROUP BY statement_id HAVING COUNT(*) > 1;",
     )
 
 
