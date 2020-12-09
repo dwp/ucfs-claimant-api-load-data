@@ -1,6 +1,6 @@
-DELETE FROM claimant_stage WHERE citizen_id IS NULL;
-DELETE FROM contract_stage WHERE contract_id IS NULL;
-DELETE FROM statement_stage WHERE statement_id IS NULL;
+DELETE FROM claimant_stage WHERE citizen_id IS NULL OR citizen_id = '';
+DELETE FROM contract_stage WHERE contract_id IS NULL OR contract_id = '';
+DELETE FROM statement_stage WHERE statement_id IS NULL OR statement_id = '';
 
 ALTER TABLE claimant_stage ADD CONSTRAINT citizen_id UNIQUE KEY (citizen_id);
 ALTER TABLE contract_stage ADD CONSTRAINT contract_id UNIQUE KEY (contract_id);
