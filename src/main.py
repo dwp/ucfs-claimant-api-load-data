@@ -67,7 +67,7 @@ def execute_statement(sql):
 def execute_file(filename, connection, sql_parameters):
     sql = open(filename).read()
 
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     for result in cursor.execute(sql, sql_parameters, multi=True):
         if result.with_rows:
             logger.debug("Executed: {}".format(result.statement))
