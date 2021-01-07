@@ -36,3 +36,7 @@ ALTER USER IF EXISTS %(ro_username)s IDENTIFIED WITH AWSAuthenticationPlugin AS 
 GRANT SELECT ON claimant to %(ro_username)s;
 GRANT SELECT ON contract to %(ro_username)s;
 GRANT SELECT ON statement to %(ro_username)s;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON claimant to %(rw_username)s;
+GRANT INSERT, SELECT, UPDATE, DELETE ON contract to %(rw_username)s;
+GRANT INSERT, SELECT, UPDATE, DELETE ON statement to %(rw_username)s;
