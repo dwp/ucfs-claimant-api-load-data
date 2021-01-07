@@ -113,6 +113,7 @@ def main(manifest):
 
     post_parameters = {
         "ro_username": os.environ["RDS_RO_USERNAME"],
+        "rw_username": os.environ["RDS_RW_USERNAME"],
     }
 
     load_stmt = (
