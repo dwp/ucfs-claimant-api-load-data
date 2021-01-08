@@ -32,6 +32,12 @@ RENAME TABLE
 
 CREATE USER IF NOT EXISTS %(ro_username)s IDENTIFIED WITH AWSAuthenticationPlugin AS 'RDS';
 ALTER USER IF EXISTS %(ro_username)s IDENTIFIED WITH AWSAuthenticationPlugin AS 'RDS';
+CREATE USER IF NOT EXISTS %(rw_username)s;
+
+GRANT SELECT ON ucfsclaimant.* TO %(ro_username)s;
+REVOKE ALL PRIVILEGES ON ucfsclaimant.* FROM %(ro_username)s;
+GRANT SELECT ON ucfsclaimant.* TO %(rw_username)s;
+REVOKE ALL PRIVILEGES ON ucfsclaimant.* FROM %(rw_username)s;
 
 GRANT SELECT ON claimant to %(ro_username)s;
 GRANT SELECT ON contract to %(ro_username)s;
