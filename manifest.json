@@ -1,5 +1,5 @@
 {
-  "bucket": "s3://bucket/etlParts/",
+  "s3_base_path": "s3://bucket/etlParts/",
   "claimant": [
     "core_claimant_00.json",
     "core_claimant_01.json"
