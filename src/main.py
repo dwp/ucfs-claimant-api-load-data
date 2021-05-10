@@ -126,11 +126,18 @@ def main(manifest):
     logger.info("Load started")
     processes = []
 
-    for table, files in manifest.items():
-        for file in files:
+    s3_base_path = manifest["s3_base_path"]
+    db_tables = ["claimant", "contract", "statement"]
+
+    for table_name in db_tables:
+        for files in manifest[table_name]:
             logger.info("Loading {}".format(file))
+            s3_full_key = os.path.join(s3_base_path, file)
             processes.append(
-                Process(target=execute_statement, args=(load_stmt.format(file, table),))
+                Process(
+                    target=execute_statement,
+                    args=(load_stmt.format(s3_full_key, table_name),),
+                )
             )
 
     for p in processes:
