@@ -130,7 +130,7 @@ def main(manifest):
     db_tables = ["claimant", "contract", "statement"]
 
     for table_name in db_tables:
-        for files in manifest[table_name]:
+        for file in manifest[table_name]:
             logger.info("Loading {}".format(file))
             s3_full_key = os.path.join(s3_base_path, file)
             processes.append(
