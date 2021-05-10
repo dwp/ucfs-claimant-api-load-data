@@ -117,7 +117,7 @@ def main(manifest):
     logger.info("Load started")
     processes = []
 
-    s3_base_path = manifest["bucket"]
+    s3_base_path = manifest["s3_base_path"]
     db_tables = ["claimant", "contract", "statement"]
 
     for table_name in db_tables:
