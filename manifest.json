@@ -1,14 +1,15 @@
 {
+  "bucket": "s3://bucket/etlParts/",
   "claimant": [
-    "s3://bucket/etlParts/core_claimant_00.json",
-    "s3://bucket/etlParts/core_claimant_01.json"
+    "core_claimant_00.json",
+    "core_claimant_01.json"
   ],
   "contract": [
-    "s3://bucket/etlParts/core_contract_00.json",
-    "s3://bucket/etlParts/core_contract_01.json"
+    "core_contract_00.json",
+    "core_contract_01.json"
   ],
   "statement": [
-    "s3://bucket/etlParts/core_statement_00.json",
-    "s3://bucket/etlParts/core_statement_01.json"
+    "core_statement_00.json",
+    "core_statement_01.json"
   ]
 }
