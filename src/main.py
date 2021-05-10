@@ -67,7 +67,7 @@ def execute_statement(sql):
 def execute_file(filename, connection, sql_parameters):
     sql = open(filename).read()
 
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     for result in cursor.execute(sql, sql_parameters, multi=True):
         if result.with_rows:
             logger.debug("Executed: {}".format(result.statement))
@@ -100,11 +100,20 @@ def get_connection(password):
     )
 
 
+def execute_query(connection, query):
+    cursor = connection.cursor()
+    cursor.execute(query)
+    result = cursor.fetchall()
+    connection.commit()
+    return result
+
+
 def main(manifest):
     password = get_master_password()
 
     post_parameters = {
         "ro_username": os.environ["RDS_RO_USERNAME"],
+        "rw_username": os.environ["RDS_RW_USERNAME"],
     }
 
     load_stmt = (

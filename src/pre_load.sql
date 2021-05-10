@@ -49,6 +49,7 @@ CREATE TABLE contract_stage (
 CREATE TABLE statement_stage (
   id INT NOT NULL AUTO_INCREMENT,
   data json NOT NULL,
+  statement_id varchar(100) GENERATED ALWAYS AS (json_unquote(json_extract(data,'$._id.statementId'))) VIRTUAL,
   contract_id varchar(100) GENERATED ALWAYS AS (json_unquote(json_extract(data,'$.assessmentPeriod.contractId'))) VIRTUAL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
